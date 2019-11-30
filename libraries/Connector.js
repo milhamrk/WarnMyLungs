@@ -10,20 +10,8 @@ var Connector = {
     Redis: function () {
         if(Connector._redis == null){
             var redis = require('redis');
-            Connector._redis = redis.createClient(_config.redis.port, _config.redis.host);
-            Connector._redis.select(_config.redis.db,function(err,resp){
-                //console.log(resp);
-            });
-
-            if(_config.redis.password != "") {
-                Connector._redis.auth(_config.redis.password, function () {
-                    console.log('Authenticated...');
-                });
-            }
-
-            Connector._redis.on('error', function(err) {
-                console.log('Error Connecting: '+err);
-            });
+            Connector._redis = redis.createClient(6380, "wml.redis.cache.windows.net", 
+                    {auth_pass: "LLnjNDPxHs7FrGVV3hzWzQKpy6GWv45S0lF9pP2dMNU=", tls: {servername: "wml.redis.cache.windows.net"}});
         }
         return Connector._redis;
     }

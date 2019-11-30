@@ -3,9 +3,9 @@ var config = {
 
 
     redis: {
-        host: "127.0.0.1",
-        port: "6379",
-        password: "",
+        host: "wml.redis.cache.windows.net",
+        port: "6380",
+        password: "LLnjNDPxHs7FrGVV3hzWzQKpy6GWv45S0lF9pP2dMNU=",
         db: "4",
         socket: ""
     }

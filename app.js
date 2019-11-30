@@ -1,7 +1,9 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var config = require('./config/config');
-var appDao = require('./dao/AppDAO');
+var homeControl = require('./controller/homeControl');
+var forecastControl = require('./controller/forecastControl');
+var userControl = require('./controller/userControl');
 var app = express();
 
 var resp = function (res, data, code, next) {
@@ -23,37 +25,79 @@ app.listen(config.init_port);
 
 console.log("Application is listening on port ", config.init_port);
 
-app.post('/user/add', function (req, res, next) {
+app.post('/beranda/add', function (req, res, next) {
 
     var body = req.body;
 
-    appDao.add_user(body, function (response, code) {
+    homeControl.addAQI(body, function (response, code) {
         resp(res, response, code, next)
     })
 
 });
-app.get('/user/:id', function (req, res, next) {
+app.get('/beranda/:id', function (req, res, next) {
     var param = req.params;
 
-    appDao.get_user(param, function (response, code) {
+    homeControl.getAQI(param, function (response, code) {
         resp(res, response, code, next)
     })
 });
-app.put('/user/:id', function (req, res, next) {
-    var id = req.params.id;
-    var param = req.body;
-
-    appDao.update_user(id, param, function (response, code) {
+app.get('/beranda/aqi/:id', function (req, res, next) {
+    var param = req.params;
+    homeControl.getAQIs(param, function (response, code) {
         resp(res, response, code, next)
     })
-
 });
-app.delete('/user/:id', function (req, res, next) {
+app.get('/forecast/:day/:month/:year/:places', function (req, res, next) {
     var param = req.params;
 
-    appDao.delete_user(param, function (response, code) {
+    forecastControl.getForecast(param, function (response, code) {
         resp(res, response, code, next)
     })
 });
 
+app.post('/forecast/add', function (req, res, next) {
 
+    var body = req.body;
+
+    forecastControl.addForecast(body, function (response, code) {
+        resp(res, response, code, next)
+    })
+
+});
+
+app.post('/user/register', function (req, res, next) {
+    var body = req.body;
+    userControl.addUser(body, function (response, code) {
+        resp(res, response, code, next)
+    })
+
+});
+app.get('/user/:phone', function (req, res, next) {
+    var param = req.params;
+
+    userControl.getUser(param, function (response, code) {
+        resp(res, response, code, next)
+    })
+});
+
+app.post('/user/login/', function (req, res, next) {
+    var body = req.body;
+    userControl.loginUser(body, function (response, code) {
+        resp(res, response, code, next)
+    })
+});
+
+app.get('/user/verify/:phone', function (req, res, next) {
+    var param = req.params;
+
+    userControl.verifyUser(param, function (response, code) {
+        resp(res, response, code, next)
+    })
+});
+app.get('/user/delete/:number', function (req, res, next) {
+    var param = req.params;
+
+    userControl.deleteUser(param, function (response, code) {
+        resp(res, response, code, next)
+    })
+});
